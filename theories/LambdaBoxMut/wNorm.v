@@ -1,10 +1,10 @@
 
-Require Import Coq.Lists.List.
-Require Import Coq.Strings.String.
-Require Import Coq.Strings.Ascii.
-Require Import Coq.Arith.EqNat.
-Require Import Coq.Arith.Compare_dec.
-Require Import Coq.micromega.Lia.
+Require Import Stdlib.Lists.List.
+Require Import Stdlib.Strings.String.
+Require Import Stdlib.Strings.Ascii.
+Require Import Stdlib.Arith.EqNat.
+Require Import Stdlib.Arith.Compare_dec.
+Require Import Stdlib.micromega.Lia.
 Require Import Common.Common.
 Require Import LambdaBoxMut.compile.
 Require Import LambdaBoxMut.term.
@@ -56,17 +56,17 @@ Qed.
 (** Wcbv reaches weak normal form **)
 Lemma Wcbv_WNorm:
   (forall t s, WcbvEval p t s -> WNorm s) /\
-  (forall t ts, WcbvEvals p t ts -> WNorms ts).  
+  (forall t ts, WcbvEvals p t ts -> WNorms ts).
 Proof.
   apply WcbvEvalEvals_ind; intros;
     try (solve[constructor; try assumption]); try assumption.
-  - destruct a as [a [b [c [d e]]]]. constructor; try assumption.  
+  - destruct a as [a [b [c [d e]]]]. constructor; try assumption.
 Qed.
 
 (** every normal form is hit **)
 Lemma WNorm_Wcbv:
   (forall s, WNorm s -> exists t, WcbvEval p t s) /\
-  (forall ts, WNorms ts -> exists us, WcbvEvals p us ts).  
+  (forall ts, WNorms ts -> exists us, WcbvEvals p us ts).
 Proof.
   apply WNormWNorms_ind; intros.
   - exists (TLambda nm bod). constructor.
@@ -74,10 +74,10 @@ Proof.
   - dstrctn H. exists (TConstruct i n x). now constructor.
   - exists TProof. constructor.
   - exists (TPrim p0); constructor.
-  - dstrctn H. dstrctn H0. exists (TApp x x0). now apply wAppCong. 
+  - dstrctn H. dstrctn H0. exists (TApp x x0). now apply wAppCong.
   - exists tnil. constructor.
   - dstrctn H. dstrctn H0. exists (tcons x x0). now constructor.
 Qed.
- 
+
 
 End Sec_environ.

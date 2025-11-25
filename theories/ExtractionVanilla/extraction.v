@@ -14,7 +14,7 @@ Require compcert.common.AST
 Require Glue.glue
         Compiler.pipeline.
 
-Require Import Coq.extraction.Extraction.
+Require Import Stdlib.extraction.Extraction.
 Require Import VanillaExtrOCamlInt63 VanillaExtrOCamlFloats ExtrOCamlPString.
 (* Standard lib *)
 

@@ -9,9 +9,9 @@ Require Import ExtLib.Data.Positive.
 Require Import ExtLib.Structures.Monad.
 Require Import ExtLib.Structures.MonadState.
 Require Import ExtLib.Data.Monads.StateMonad.
-From MetaCoq.Utils Require Import bytestring MCString. (* For identifier names *)
-From MetaCoq.Common Require Import BasicAst Primitive. (* For identifier names *)
-From MetaCoq.PCUIC Require Import PCUICPrimitive. (* For identifier names *)
+From MetaRocq.Utils Require Import bytestring MRString. (* For identifier names *)
+From MetaRocq.Common Require Import BasicAst Primitive. (* For identifier names *)
+From MetaRocq.PCUIC Require Import PCUICPrimitive. (* For identifier names *)
 Require Import Common.AstCommon.
 
 Import MonadNotation.
@@ -110,7 +110,7 @@ Definition emit_prim (p : primitive) : M unit :=
   match projT1 p as tag return prim_value tag -> M unit with
   | primInt => fun f => emit "(int: " ;; emit (Show.string_of_prim_int f) ;; emit ")"
   | primFloat => fun f => emit "(float: " ;; emit (AstCommon.string_of_float f) ;; emit ")"
-  
+
   end%bs (projT2 p).
 
 (* We assume each expression starts on a fresh newline, and that it
@@ -122,15 +122,15 @@ Fixpoint emit_exp (indent:nat) (e:exp) {struct e} : M unit :=
     emit "let " ;; emit (show_var x) ;;
          (* emit " := con_" ;; emit (show_pos tg) ;; *)
     emit " := " ;; emit (show_con tg) ;;
-    emit (show_vars xs) ;; emit " in " ;; newline ;; 
-    emit_exp indent e 
+    emit (show_vars xs) ;; emit " in " ;; newline ;;
+    emit_exp indent e
   | Eproj x tg n y e =>
     emit "let " ;; emit (show_var x) ;;
     emit " := proj_" ;; emit (show_binnat n) ;; emit " " ;;
     emit (show_pos tg) ;; emit " " ;;
     emit (show_var y) ;; emit " in " ;; newline ;;
     emit_exp indent e
-  | Eprim_val x p e => 
+  | Eprim_val x p e =>
     emit "let " ;; emit (show_var x) ;;
     emit " := prim: " ;; emit_prim p ;;
     emit " in " ;; newline ;;
@@ -189,7 +189,7 @@ Fixpoint emit_val (indent:nat) (v:val) {struct v}: M unit :=
             (* emit "fun "%bs ;; emit (show_var f);;emit (show_ftag t');;emit (show_vars xs);;emit ":="%bs;; emit "..."%bs ;; newline *)
              | None => emit "ERROR! FUN "%bs ;; emit (show_var f);;emit " NOT FOUND!"%bs;;newline
            end)
-        | Vprim p => emit "Primitive "%bs ;; emit_prim p ;; newline 
+        | Vprim p => emit "Primitive "%bs ;; emit_prim p ;; newline
         | Vint i => emit "Int "%bs;;newline
       end.
 (*
@@ -246,7 +246,7 @@ Definition show_env (rho:M.t val) : string :=
   String.String chr_newline
          (show_tree (snd (runState (emit_env 0 rho) Emp))).
 
-(* We add an extra newline at the front so that Coq will display the
+(* We add an extra newline at the front so that Stdlib will display the
    whole program correctly when we evaluate. *)
 Definition show_exp (x:exp) : string :=
   String.String chr_newline

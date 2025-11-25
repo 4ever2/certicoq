@@ -6,7 +6,7 @@ Import MonadNotation.
 Import ListNotations.
 Open Scope monad_scope.
 
-Require Import Coq.Strings.Ascii.
+Require Import Stdlib.Strings.Ascii.
 
 Inductive rgx : Type :=
 | empty   : rgx

@@ -4,7 +4,7 @@ Require Import CertiCoq.Benchmarks.lib.Binom.
 Require Import CertiCoq.Benchmarks.lib.Color.
 Require Import CertiCoq.Benchmarks.lib.sha256.
 Require Import CertiCoq.Benchmarks.lib.coind.
-From MetaCoq.Utils Require Import bytestring MCString.
+From MetaRocq.Utils Require Import bytestring MRString.
 From CertiCoq.Plugin Require Import CertiCoq.
 
 Definition foo := 0.
@@ -120,7 +120,7 @@ Eval compute in "Compiling lazy factorial (using unsafe passes)".
 
 CertiCoq Compile -unsafe-erasure -O 1 lazy_factorial.
 CertiCoq Compile -unsafe-erasure -ext "_opt" lazy_factorial.
-CertiCoq Compile -unsafe-erasure -args 1000 -config 9 -O 1 -ext "_opt_ll" lazy_factorial. 
+CertiCoq Compile -unsafe-erasure -args 1000 -config 9 -O 1 -ext "_opt_ll" lazy_factorial.
 (* CertiCoq Compile -O 0 -cps -ext "_cps" demo1. *)
 (* CertiCoq Compile -cps -ext "_cps_opt" demo1. *)
 CertiCoq Generate Glue -file "glue_lazy_factorial" [ ].

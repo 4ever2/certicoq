@@ -2,7 +2,7 @@
  * Author: Anonymized, 2016
  *)
 
-From Coq Require Import PArith.PArith MSets.MSetRBT Classes.Morphisms Sets.Ensembles
+From Stdlib Require Import PArith.PArith MSets.MSetRBT Classes.Morphisms Sets.Ensembles
      Relations.Relations Lists.List SetoidList Permutation micromega.Lia.
 Require Import compcert.lib.Coqlib LambdaANF.tactics.
 From CertiCoq.LambdaANF Require Import Ensembles_util List_util functions.

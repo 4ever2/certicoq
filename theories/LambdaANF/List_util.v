@@ -3,7 +3,7 @@
  *)
 
 
-From Coq Require Import Lists.List Relations.Relations Classes.RelationClasses
+From Stdlib Require Import Lists.List Relations.Relations Classes.RelationClasses
          micromega.Lia Numbers.BinNums Structures.OrdersEx Sets.Ensembles
          SetoidList ZArith Arith Sorting.Permutation SetoidPermutation
          FunInd.

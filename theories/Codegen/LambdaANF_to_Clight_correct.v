@@ -23,7 +23,7 @@ Require Import LambdaANF.cps LambdaANF.eval LambdaANF.cps_util LambdaANF.List_ut
 
 
 
-Require Import Coq.Arith.Arith Coq.NArith.BinNat ExtLib.Data.String ExtLib.Data.List Coq.micromega.Lia Coq.Program.Program Coq.micromega.Psatz Coq.Sets.Ensembles Coq.Logic.Decidable Coq.Lists.ListDec Coq.Relations.Relations.
+Require Import Stdlib.Arith.Arith Stdlib.NArith.BinNat ExtLib.Data.String ExtLib.Data.List Stdlib.micromega.Lia Stdlib.Program.Program Stdlib.micromega.Psatz Stdlib.Sets.Ensembles Stdlib.Logic.Decidable Stdlib.Lists.ListDec Stdlib.Relations.Relations.
 
 Require Import compcert.common.AST
         compcert.common.Errors

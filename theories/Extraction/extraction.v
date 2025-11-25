@@ -14,10 +14,10 @@ Require compcert.common.AST
 Require Glue.glue
         Compiler.pipeline.
 
-From MetaCoq.ErasurePlugin Require Import Erasure.
+From MetaRocq.ErasurePlugin Require Import Erasure.
 (* Standard lib *)
 Require Import ExtrOcamlBasic ExtrOCamlFloats ExtrOCamlInt63 ExtrOCamlPString.
-Require Import Coq.extraction.Extraction.
+Require Import Stdlib.extraction.Extraction.
 Require Import ZArith NArith.
 
 (* Coqlib *)

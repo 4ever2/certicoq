@@ -1,10 +1,9 @@
 From CertiCoq.VanillaPlugin Require Import Loader.
-From Coq Require Import PString.
+From Stdlib Require Import PString.
 
 CertiCoq Register [
-  Coq.Strings.PrimString.compare => "prim_string_compare",
-  Coq.Strings.PrimString.get => "prim_string_get",
-  Coq.Strings.PrimString.length => "prim_string_length"
+  Stdlib.Strings.PrimString.compare => "prim_string_compare",
+  Stdlib.Strings.PrimString.get => "prim_string_get",
+  Stdlib.Strings.PrimString.length => "prim_string_length"
 ]
 Include [ Library "prim_string.h" ].
-

@@ -53,7 +53,7 @@ value print_string(struct thread_info *tinfo, value s) {
     } else {
       break;
     }
-  } 
+  }
   printf("\n");
   fflush(stdout);
 
@@ -84,7 +84,7 @@ value string_to_value(struct thread_info *tinfo, char *s) {
   return temp;
 }
 
-value scan_string(struct thread_info *tinfo) { 
+value scan_string(struct thread_info *tinfo) {
   char input[100];
   scanf("%s", input);
 
@@ -129,23 +129,23 @@ int main(int argc, char *argv[]) {
   tinfo = make_tinfo();
   start = clock();
 
-  // Run Coq program
+  // Run Rocq program
   body(tinfo);
   end = clock();
 
   clo = tinfo -> args[1];
 
   // Types are dummy values
-  value io_types = 
+  value io_types =
     alloc_make_CertiCoq_Benchmarks_io_io_IO_Types_Build_IO_Types(tinfo, 1);
 
-  value io_impl = 
+  value io_impl =
     alloc_make_CertiCoq_Benchmarks_io_io_IO_Impl_Build_IO_Impl(
-        tinfo, 
-        io_ret_clo, 
+        tinfo,
+        io_ret_clo,
         io_bind_clo);
 
-  value string_ffi = 
+  value string_ffi =
     alloc_make_CertiCoq_Benchmarks_io_io_StringFFI_Build_StringFFI(
         tinfo,
         print_string_clo,

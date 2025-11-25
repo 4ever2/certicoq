@@ -40,7 +40,7 @@ bootstrap: plugin cplugin
 install: #plugin cplugin bootstrap
 	$(MAKE) -C libraries install
 	$(MAKE) -C theories install
-	#$(MAKE) -C runtime install
+	$(MAKE) -C runtime install
 	#$(MAKE) -C plugin install
 	#$(MAKE) -C cplugin install
 	#$(MAKE) -C bootstrap install

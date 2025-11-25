@@ -90,7 +90,7 @@ value print_string(struct thread_info *tinfo, value s) {
     } else {
       break;
     }
-  } 
+  }
   printf("\n");
   fflush(stdout);
 
@@ -121,7 +121,7 @@ value string_to_value(struct thread_info *tinfo, char *s) {
   return temp;
 }
 
-value scan_string(struct thread_info *tinfo) { 
+value scan_string(struct thread_info *tinfo) {
   char input[100];
   scanf("%s", input);
 
@@ -149,7 +149,7 @@ unsigned int nat_to_uint(value n) {
     } else {
       break;
     }
-  } 
+  }
   return i;
 }
 
@@ -188,12 +188,12 @@ struct cell *new_cell (value k, value v, struct cell *next) {
 }
 
 value new(struct thread_info * tinfo, value sigma, value tau) {
-  // the hashtable lives in C-land, 
+  // the hashtable lives in C-land,
   // we would have to do memory management for it later manually
   return (value) new_table();
 }
 
-value lookup(struct thread_info * tinfo, 
+value lookup(struct thread_info * tinfo,
              value sigma, value tau, value eq_inst, value hashable_inst,
              value table, value key) {
   call(tinfo, *((value *) hashable_inst), key);
@@ -211,7 +211,7 @@ value lookup(struct thread_info * tinfo,
   return make_Coq_Init_Datatypes_option_None();
 }
 
-void insert_list(struct thread_info * tinfo, 
+void insert_list(struct thread_info * tinfo,
                   value eq_inst,
                   struct cell **r0, value key, value val) {
   struct cell *p, **r;
@@ -232,7 +232,7 @@ void insert_list(struct thread_info * tinfo,
   }
 }
 
-value insert(struct thread_info * tinfo, 
+value insert(struct thread_info * tinfo,
              value sigma, value tau, value eq_inst, value hashable_inst,
              value table, value key, value val) {
   call(tinfo, *((value *) hashable_inst), key);
@@ -242,7 +242,7 @@ value insert(struct thread_info * tinfo,
   return make_Coq_Init_Datatypes_unit_tt();
 }
 
-void delete_list(struct thread_info * tinfo, 
+void delete_list(struct thread_info * tinfo,
                   value eq_inst,
                   struct cell **r0, value key) {
   struct cell *p, **r;
@@ -263,7 +263,7 @@ void delete_list(struct thread_info * tinfo,
   }
 }
 
-value delete(struct thread_info * tinfo, 
+value delete(struct thread_info * tinfo,
              value sigma, value tau, value eq_inst, value hashable_inst,
              value table, value key) {
   call(tinfo, *((value *) hashable_inst), key);
@@ -283,7 +283,7 @@ int main(int argc, char *argv[]) {
   tinfo = make_tinfo();
   start = clock();
 
-  // Run Coq program
+  // Run Rocq program
   clo = body(tinfo);
   end = clock();
 
@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
 
   value io_impl = alloc_make_CertiCoq_Benchmarks_hash_hash_IO_Impl_Build_IO_Impl(tinfo, io_ret_clo, io_bind_clo);
 
-  value string_ffi = 
+  value string_ffi =
     alloc_make_CertiCoq_Benchmarks_hash_hash_StringFFI_Build_StringFFI(
         tinfo,
         print_string_clo,
@@ -302,7 +302,7 @@ int main(int argc, char *argv[]) {
   value hash_types = alloc_make_CertiCoq_Benchmarks_hash_hash_Hash_Types_Build_Hash_Types(tinfo, 1);
 
   // TODO these functions don't handle garbage collection yet.
-  value hash_ffi = 
+  value hash_ffi =
     alloc_make_CertiCoq_Benchmarks_hash_hash_HashFFI_Build_HashFFI(
         tinfo,
         new_clo,
