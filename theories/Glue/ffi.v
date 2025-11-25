@@ -98,10 +98,10 @@ Fixpoint skip_params
   end.
 
 (* Same function as [repeat] but for [typelist]s instead of [list]s. *)
-Fixpoint repeat_typelist (t : type) (n : nat) : typelist :=
+Fixpoint repeat_typelist (t : type) (n : nat) : list type :=
   match n with
-  | 0 => Tnil
-  | S n' => Tcons t (repeat_typelist t n')
+  | 0 => nil
+  | S n' => cons t (repeat_typelist t n')
   end.
 
 Variant Backend := ANF | CPS.
@@ -122,7 +122,7 @@ Fixpoint env_proj
   | S i' => env_proj i' (Field(env, 1))
   end.
 
-Local Open Scope bs_scope.  
+Local Open Scope bs_scope.
 
 Definition make_curried_fn
          (* The sanitized unqual. name of the FFI function we're dealing with *)
@@ -220,7 +220,7 @@ Definition make_curried_fn
         _res <- gensym "result" ;;
         let call := Scall (Some _res)
                           (Evar _next_fn
-                                (Tfunction (Tcons (threadInf _thread_info)
+                                (Tfunction (cons (threadInf _thread_info)
                                                   (repeat_typelist val arity))
                                            val cc_default))
                           (Evar _tinfo (threadInf _thread_info) ::
@@ -280,10 +280,10 @@ Definition make_curried_fn
                       Etempvar _env val ::
                       Etempvar _arg val :: nil in
         let forcelist :=
-            nth c_args ((* if c_args = 0 *) Tnil ::
-                        (* if c_args = 1 *) Tcons val Tnil :: nil)
-                (* else *) (Tcons val (Tcons val Tnil)) in
-        let ret_ty := Tpointer (Tfunction (Tcons (threadInf _thread_info) forcelist)
+            nth c_args ((* if c_args = 0 *) nil ::
+                        (* if c_args = 1 *) cons val nil :: nil)
+                (* else *) (cons val (cons val nil)) in
+        let ret_ty := Tpointer (Tfunction (cons (threadInf _thread_info) forcelist)
                                           Tvoid cc_default) noattr in
         multiple (skipn c_args
           (Sassign (Field(args_expr, Z.of_nat 0)) (Field(var _k, 1%Z)) ::
@@ -347,8 +347,8 @@ Definition make_one_field
   let extern_def :=
     (_extern_fn,
      Gfun (External (EF_external (String.to_string kn)
-                 (mksignature (val_typ :: nil) AST.Tvoid cc_default))
-               (Tcons (threadInf _thread_info) (repeat_typelist val arity))
+                 (mksignature ((inj_type val_typ) :: nil) Xvoid cc_default))
+               (cons (threadInf _thread_info) (repeat_typelist val arity))
                val cc_default)) in
   rest <- make_curried_fns kn arity arity is_io _extern_fn ;;
   match rest with

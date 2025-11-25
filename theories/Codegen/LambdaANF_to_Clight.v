@@ -281,15 +281,15 @@ Transparent make_vint.
 Transparent make_cint.
 
 Definition funTy : type :=
-  Tfunction (Tcons threadInf Tnil) Tvoid cc_default.
+  Tfunction (cons threadInf nil) Tvoid cc_default.
 
 Definition pfunTy : type := Tpointer funTy noattr.
 
 Definition gcTy : type :=
-  Tfunction (Tcons (Tpointer val noattr) (Tcons threadInf Tnil)) Tvoid cc_default.
+  Tfunction (cons (Tpointer val noattr) (cons threadInf nil)) Tvoid cc_default.
 
 Definition isptrTy : type :=
-  Tfunction (Tcons val Tnil) (Tint IBool Unsigned noattr) cc_default.
+  Tfunction (cons val nil) (Tint IBool Unsigned noattr) cc_default.
 
 Definition valPtr : type :=
   Tpointer val {| attr_volatile := false; attr_alignas := None |}.
@@ -300,26 +300,26 @@ Definition argvTy : type :=
 Definition boolTy : type :=
   Tint IBool Unsigned noattr.
 
-Fixpoint mkFunTyList (n : nat) : typelist :=
+Fixpoint mkFunTyList (n : nat) : list type :=
   match n with
-  | 0 => Tnil
-  | S n' => Tcons val (mkFunTyList n')
+  | 0 => nil
+  | S n' => cons val (mkFunTyList n')
   end.
 
 Definition mkFunTy (n : nat) : type :=
-  Tfunction (Tcons threadInf (mkFunTyList n)) Tvoid cc_default.
+  Tfunction (cons threadInf (mkFunTyList n)) Tvoid cc_default.
 
 Definition mkPrimTy (n : nat) :=
   Tfunction (mkFunTyList n) val cc_default.
 
 Definition mkPrimTyTinfo (n : nat) :=
-  (Tfunction (Tcons threadInf (mkFunTyList n)) val cc_default).
+  (Tfunction (cons threadInf (mkFunTyList n)) val cc_default).
 
 Definition make_tinfoTy : type :=
-  (Tfunction Tnil threadInf cc_default).
+  (Tfunction nil threadInf cc_default).
 
 Definition exportTy : type :=
-  Tfunction (Tcons threadInf Tnil) valPtr cc_default.
+  Tfunction (cons threadInf nil) valPtr cc_default.
 
 
 Notation "'var' x" := (Etempvar x val) (at level 20).
@@ -690,7 +690,7 @@ Definition make_case_switch
     (Sswitch (Ebinop Oand (Field(var x, -1)) (make_cint 255 val) val) ls)
     (Sswitch (Ebinop Oshr (var x) (make_cint 1 val) val) ls').
 
-Definition to_int64 (i : PrimInt63.int) : int64. 
+Definition to_int64 (i : PrimInt63.int) : int64.
   exists (Uint63.to_Z i * 2 + 1)%Z.
   pose proof (Uint63.to_Z_bounded i).
   unfold Uint63.wB in H. unfold Int64.modulus, Int64.wordsize, Wordsize_64.wordsize.
@@ -710,12 +710,12 @@ Next Obligation.
   unfold model_to_ff.
   pose proof (FloatAxioms.Prim2SF_valid f).
   rewrite Binary.valid_binary_SF2FF. exact H.
-  unfold float64_to_model. 
+  unfold float64_to_model.
   unfold FloatOps.Prim2SF. cbn.
   Admitted.
 
 Definition compile_float (cenv : ctor_env) (ienv : n_ind_env) (fenv : fun_env) (map : fun_info_env)
-  (x : positive) (f : Floats.float) := 
+  (x : positive) (f : Floats.float) :=
   let tag := c_int 1277%Z (Tlong Unsigned noattr) in
   x ::= [val] (allocPtr +' (c_int Z.one val)) ;;;
   allocIdent ::= allocPtr +' (c_int 2 val) ;;;
@@ -1124,7 +1124,7 @@ Definition translate_funs_fast
         fn_params := (tinfIdent, threadInf)::nil;
         fn_vars := nil;
         fn_temps := (map (fun x => (x, val)) localVars) ++ (allocIdent, valPtr) :: (limitIdent, valPtr) :: (argsIdent, valPtr) :: nil;
-        fn_body := 
+        fn_body :=
           allocIdent ::= Efield tinfd allocIdent valPtr ;;;
           limitIdent ::= Efield tinfd limitIdent valPtr ;;;
           argsIdent ::= Efield tinfd argsIdent (Tarray uval maxArgs noattr);;;
@@ -1264,13 +1264,13 @@ Definition global_defs (e : exp)
   (* (gcIdent, *)
   (*  Gfun (External (EF_external (String.to_string "garbage_collect") *)
   (*                 (mksignature (val_typ :: nil) AST.Tvoid cc_default)) *)
-  (*     (Tcons (Tpointer val noattr) (Tcons threadInf Tnil)) *)
+  (*     (cons (Tpointer val noattr) (cons threadInf nil)) *)
   (*     Tvoid *)
   (*     cc_default)) :: *)
   (* (isptrIdent, *)
   (*  Gfun (External (EF_external (String.to_string "is_ptr") *)
   (*                            (mksignature (val_typ :: nil) AST.Tvoid cc_default)) *)
-  (*     (Tcons val Tnil) (Tint IBool Unsigned noattr) *)
+  (*     (cons val nil) (Tint IBool Unsigned noattr) *)
   (*     cc_default)) :: *)
   nil.
 
@@ -1644,16 +1644,16 @@ Definition exportIdent := 21%positive.
 Definition make_tinfo_rec : positive * globdef Clight.fundef type :=
   (make_tinfoIdent,
    Gfun (External (EF_external (String.to_string "make_tinfo")
-                               (mksignature (nil) (Tret val_typ) cc_default))
-                  Tnil
+                               (mksignature (nil) (inj_type val_typ) cc_default))
+                  nil
                   threadInf
                   cc_default)).
 
 Definition export_rec : positive * globdef Clight.fundef type :=
   (exportIdent,
    Gfun (External (EF_external (String.to_string "export")
-                               (mksignature (cons val_typ nil) (Tret val_typ) cc_default))
-                  (Tcons threadInf Tnil)
+                               (mksignature (cons (inj_type val_typ) nil) (inj_type val_typ) cc_default))
+                  (cons threadInf nil)
                   valPtr
                   cc_default)).
 

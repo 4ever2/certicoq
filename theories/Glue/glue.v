@@ -262,7 +262,7 @@ Section Externs.
     ret (ident, ty, gv).
 
   Definition ty_printf : type :=
-    Tfunction (Tcons (tptr tschar) Tnil) tint cc_default.
+    Tfunction (cons (tptr tschar) nil) tint cc_default.
 
   Definition get_unboxed_ordinal : glueM def :=
     gname <- gensym "get_unboxed_ordinal" ;;
@@ -390,8 +390,8 @@ Section Externs.
       | ANF =>
         Composite _closure Struct
          (Member_plain _func
-                      (tptr (Tfunction (Tcons (tptr (Tstruct _thread_info noattr))
-                                       (Tcons val (Tcons val Tnil))) val cc_default)) ::
+                      (tptr (Tfunction (cons (tptr (Tstruct _thread_info noattr))
+                                       (cons val (cons val nil))) val cc_default)) ::
           Member_plain _env val :: nil) noattr ::
         (* Composite _stack_frame Struct *)
         (*  (Member_plain _next (tptr val) :: *)
@@ -408,8 +408,8 @@ Section Externs.
       | CPS =>
         Composite _closure Struct
          (Member_plain _func
-                      (tptr (Tfunction (Tcons (tptr (Tstruct _thread_info noattr))
-                                       (Tcons val (Tcons val Tnil))) Tvoid cc_default)) ::
+                      (tptr (Tfunction (cons (tptr (Tstruct _thread_info noattr))
+                                       (cons val (cons val nil))) Tvoid cc_default)) ::
           Member_plain _env val :: nil) noattr ::
         (* Composite _thread_info Struct *)
         (*  (Member_plain _alloc (tptr val) :: *)
@@ -420,16 +420,16 @@ Section Externs.
       end in
     let toolbox :=
         {| printf_info :=
-              (_printf, Tfunction (Tcons (tptr tschar) Tnil) tint cc_default)
+              (_printf, Tfunction (cons (tptr tschar) nil) tint cc_default)
          ; is_ptr_info :=
-              (_is_ptr, Tfunction (Tcons val Tnil) tint cc_default)
+              (_is_ptr, Tfunction (cons val nil) tint cc_default)
          ; literals_info := literals
          ; get_unboxed_ordinal_info :=
-              (_guo, Tfunction (Tcons val Tnil) tuint cc_default)
+              (_guo, Tfunction (cons val nil) tuint cc_default)
          ; get_boxed_ordinal_info :=
-              (_gbo, Tfunction (Tcons val Tnil) tuint cc_default)
+              (_gbo, Tfunction (cons val nil) tuint cc_default)
          ; get_args_info :=
-              (_get_args, Tfunction (Tcons val Tnil) (tptr val) cc_default)
+              (_get_args, Tfunction (cons val nil) (tptr val) cc_default)
          ; thread_info_info := tinfo
          ; stack_frame_info := stack_frame
          ; closure_info := closure
@@ -443,12 +443,12 @@ Section Externs.
                           (mksignature (AST.Tint :: nil)
                                        (Tret AST.Tint)
                                        cc_default))
-                        (Tcons (tptr tschar) Tnil) tint cc_default)) ::
+                        (cons (tptr tschar) nil) tint cc_default)) ::
        *)
        (_is_ptr,
          Gfun (External (EF_external "is_ptr"
-                          (mksignature (val_typ :: nil) AST.Tvoid cc_default))
-                        (Tcons val Tnil)
+                          (mksignature ((inj_type val_typ) :: nil) Xvoid cc_default))
+                        (cons val nil)
                         tint cc_default)) ::
        (_guo, def_guo) ::
        (_gbo, def_gbo) ::
@@ -588,7 +588,7 @@ Section Printers.
   (* FIXME currently we assume all print functions have the same type,
      but that's not correct.
      Print functions for parametrized types take > 1 arguments. *)
-  Definition ty_printer : type := Tfunction (Tcons val Tnil) tvoid cc_default.
+  Definition ty_printer : type := Tfunction (cons val nil) tvoid cc_default.
 
   Definition report_inductive (i : inductive) : string :=
     "type #" ++ show_nat (inductive_ind i) ++ " in the "
@@ -837,7 +837,7 @@ Section Printers.
         entire_switch <- switch_cases (enumerate_pos ctors) ;;
         let body :=
           Scall (Some _tag)
-             (Evar gtname (Tfunction (Tcons val Tnil) tuint cc_default))
+             (Evar gtname (Tfunction (cons val nil) tuint cc_default))
              ((Etempvar _v val) :: nil) ;;;
           (if won't_take_args
             then print_ctor_name
@@ -1246,22 +1246,22 @@ Section FunctionCalls.
                      Etempvar _arg val :: nil in
     let fargs := match backend with ANF => fargs_anf | CPS => fargs_cps end in
     let forcelist_anf :=
-        nth c_args ((* if c_args = 0 *) Tnil ::
-                    (* if c_args = 1 *) Tcons val Tnil :: nil)
-            (* else *) (Tcons val (Tcons val Tnil)) in
+        nth c_args ((* if c_args = 0 *) nil ::
+                    (* if c_args = 1 *) cons val nil :: nil)
+            (* else *) (cons val (cons val nil)) in
     let forcelist_cps :=
-        nth c_args ((* if c_args = 0 *) Tnil ::
-                    (* if c_args = 1 *) Tcons val Tnil ::
-                    (* if c_args = 2 *) Tcons val (Tcons val Tnil) :: nil)
-            (* else *) (Tcons val (Tcons val (Tcons val Tnil))) in
+        nth c_args ((* if c_args = 0 *) nil ::
+                    (* if c_args = 1 *) cons val nil ::
+                    (* if c_args = 2 *) cons val (cons val nil) :: nil)
+            (* else *) (cons val (cons val (cons val nil))) in
     let forcelist := match backend with ANF => forcelist_anf | CPS => forcelist_cps end in
     let ret_ty :=
       match backend with
       | ANF =>
-        Tpointer (Tfunction (Tcons (threadInf _thread_info) forcelist)
+        Tpointer (Tfunction (cons (threadInf _thread_info) forcelist)
                             val cc_default) noattr
       | CPS =>
-        Tpointer (Tfunction (Tcons (threadInf _thread_info) forcelist)
+        Tpointer (Tfunction (cons (threadInf _thread_info) forcelist)
                             Tvoid cc_default) noattr
       end in
     let deref_cast_clo :=

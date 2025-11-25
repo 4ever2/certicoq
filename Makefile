@@ -2,8 +2,8 @@
 
 
 all theories/Extraction/extraction.vo: theories/Makefile libraries/Makefile
-	$(MAKE) -C libraries 
-	$(MAKE) -C theories 
+	$(MAKE) -C libraries
+	$(MAKE) -C theories
 
 theories/Makefile: theories/_CoqProject
 	cd theories;coq_makefile -f _CoqProject -o Makefile
@@ -37,13 +37,13 @@ cplugin/CertiCoq.vo: all cplugin/Makefile theories/ExtractionVanilla/extraction.
 bootstrap: plugin cplugin
 	$(MAKE) -C bootstrap all
 
-install: plugin cplugin bootstrap
+install: #plugin cplugin bootstrap
 	$(MAKE) -C libraries install
 	$(MAKE) -C theories install
-	$(MAKE) -C runtime install
-	$(MAKE) -C plugin install
-	$(MAKE) -C cplugin install
-	$(MAKE) -C bootstrap install
+	#$(MAKE) -C runtime install
+	#$(MAKE) -C plugin install
+	#$(MAKE) -C cplugin install
+	#$(MAKE) -C bootstrap install
 
 # Clean generated makefiles
 mrproper: theories/Makefile libraries/Makefile plugin/Makefile cplugin/Makefile
