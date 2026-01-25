@@ -22,7 +22,6 @@ build: [
   ["bash" "./configure.sh"]
   [make "all"]
   [make "plugins"]
-  [make "bootstrap"]
 ]
 install: [
   [make "install"]
