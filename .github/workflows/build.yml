@@ -37,14 +37,15 @@ jobs:
               # TODO: this should be done in the Dockerfile
               opam update
               opam pin add -n -k version rocq-stdlib 9.0.0
-              opam pin add -n -k version rocq-prover 9.1.0
+              opam pin add -n -k version rocq-prover 9.0.0
+              opam pin add -n -k version rocq-core 9.1.0
               opam pin add -n -k version coqide-server 9.1.0
               opam pin add -n -k version coq-compcert 3.17
               opam pin add -n -k version rocq-equations 1.3.1+9.1
               opam pin add -n -k version coq-ext-lib 0.13.0
               opam pin add -n -k version rocq-metarocq 1.4.1+9.1
               opam pin add -n -k version coq-wasm 2.2.0
-              opam install -y -j 4 rocq-prover coqide-server rocq-stdlib rocq-bignums rocq-equations rocq-metarocq coq-compcert coq-ext-lib coq-wasm
+              opam install -y -j 4 rocq-prover rocq-core coqide-server rocq-stdlib rocq-bignums rocq-equations rocq-metarocq coq-compcert coq-ext-lib coq-wasm
             endGroup
           before_script: |
             startGroup "Install more dependencies"
