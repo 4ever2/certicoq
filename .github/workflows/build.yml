@@ -35,6 +35,8 @@ jobs:
 
             startGroup "opam pin"
               # TODO: this should be done in the Dockerfile
+              opam update
+              opam pin add coq 9.1.0
               opam pin add coq-compcert 3.17 -y
             #   opam pin -n -y submodules/metacoq
             endGroup

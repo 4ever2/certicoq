@@ -16,23 +16,23 @@
   ## the name of the nixpkgs attribute, if so, set it here:
   # pname = "{{shortname}}";
 
-  default-bundle = "9.1";
+  default-bundle = "default";
   ## When generating GitHub Action CI, one workflow file
   ## will be created per bundle
-  bundles."9.1" = { coqPackages = {
+  bundles."default" = { coqPackages = {
       coq.override.version = "9.1";
       compcert.job = false;
       compcert.override.version = "3.17";
       wasmcert.job = false;
       wasmcert.override.version = "v2.2.0";
       metarocq.job = false;
-      metarocq.override.version = "v1.4.1-9.1";
+      metarocq.override.version = "1.4.1-9.1";
     }; rocqPackages = {
       rocq-core.override.version = "9.1";
     };
   };
 
-  bundles."9.1".push-branches = ["master"];
+  bundles."default".push-branches = ["master"];
 
   ## Cachix caches to use in CI
   ## Below we list some standard ones
