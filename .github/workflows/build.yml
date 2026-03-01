@@ -35,7 +35,7 @@ jobs:
 
             startGroup "opam pin"
               # TODO: this should be done in the Dockerfile
-              opam update -y -u
+              opam update
               opam pin add -n -k version rocq-stdlib 9.0.0
               opam pin add -n -k version rocq-prover 9.1.0
               opam pin add -n -k version coqide-server 9.1.0
