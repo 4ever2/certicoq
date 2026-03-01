@@ -35,7 +35,7 @@ jobs:
 
             startGroup "opam pin"
               # TODO: this should be done in the Dockerfile
-              opam pin add coq-compcert 3.14 -y
+              opam pin add coq-compcert 3.17 -y
             #   opam pin -n -y submodules/metacoq
             endGroup
           before_script: |
